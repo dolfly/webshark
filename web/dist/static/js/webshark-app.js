@@ -465,7 +465,7 @@
 		if(pcap.size == 0) { console.log('zero size'); return; }
 		var formData = new FormData();
 		formData.append('f', pcap, file);
-		var res = await fetch("/webshark/upload", { method: 'POST', body: formData });
+		var res = await fetch("/api/upload", { method: 'POST', body: formData });
 		console.log('---------------- uploaded remote pcap', res, file);
 		req_data.capture = file;
 		console.log('---------------- new req',req_data);

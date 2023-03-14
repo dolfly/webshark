@@ -31,19 +31,17 @@ module.exports = function (fastify, opts, next) {
         let loaded_files = sharkd_dict.get_loaded_sockets();
         files.forEach( async function(pcap_file){
           if (pcap_file.endsWith('.pcap')) {
-
-	    if(pcap_file.startsWith('http:')){
-		  const res = await fetch(pcap_file);
-                  var filename = pcap_file.split('/').pop()
-		  const fileStream = fs.createWriteStream(CAPTURES_PATH+filename);
-		  await new Promise((resolve, reject) => {
-		      res.body.pipe(fileStream);
-		      res.body.on("error", reject);
-		      fileStream.on("finish", resolve);
-		    });
-		  pcap_file=filename;
-	    }
-
+            if(pcap_file.startsWith('http:')){
+              const res = await fetch(pcap_file);
+                          var filename = pcap_file.split('/').pop()
+              const fileStream = fs.createWriteStream(CAPTURES_PATH+filename);
+              await new Promise((resolve, reject) => {
+                  res.body.pipe(fileStream);
+                  res.body.on("error", reject);
+                  fileStream.on("finish", resolve);
+                });
+              pcap_file=filename;
+            }
             let pcap_stats = fs.statSync(CAPTURES_PATH + pcap_file);
             if (loaded_files.includes(pcap_file)) {
               results.files.push({"name": pcap_file, "size": pcap_stats.size, "status": {"online": true}});
